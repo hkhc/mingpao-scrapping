@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="mingPaoSite" parent="genericSite" class="thinkpanda.mingpao.MingPaoSite" scope="prototype">
+		<property name="registry">
+			<bean parent="genericRegistry">
+				<property name="registryDefinition">
+					<bean class="com.pithk.autoweb.SimpleRegistryDefinition">
+						<property name="matchers">
+							<list>
+								<bean parent="xpathPageMatcher">
+									<property name="pageBeanName" value="homePage"/>
+									<!-- //form[@method='post' and contains(@action,'EpaperLogin2.cfm')]-->
+									<property name="xpath" value="//form[@method='post' and contains(@action,'EpaperLogin2.cfm')]"/>
+								</bean>
+								<bean parent="xpathPageMatcher">
+									<property name="pageBeanName" value="menuPage"/>
+									<property name="xpath" value="//a[contains(@href,'javascript:popupWindow') and contains(@href,'Epaper1.cfm')]"/>
+								</bean>
+								<bean parent="xpathPageMatcher" >
+									<property name="pageBeanName" value="epaperCalendarPage"/>
+									<property name="xpath" value="//a[@target='mpepaper']"/>
+								</bean>
+								<bean parent="xpathPageMatcher" >
+									<property name="pageBeanName" value="epaperIssuePage"/>
+									<property name="xpath" value="//div[@style='float: left;']//a[contains(@href,'Content2.cfm')]"/>
+								</bean>
+							</list>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property> 
+
+		<!-- <property name="startUrl" value="http://premium.mingpao.com/cfm/mem_Login1.cfm?SuccessUrl=%2Fcfm%2FEpaper1%2Ecfm%3F"/>-->
+    	<property name="startUrl" value="http://premium.mingpao.com"/>
+		
+	</bean>
+
+	<bean id="homePage" parent="genericGetPage" class="thinkpanda.mingpao.MingPaoHomePage" scope="prototype">
+	</bean>	
+
+	<bean id="menuPage" parent="genericGetPage" class="thinkpanda.mingpao.MingPaoMenuPage" scope="prototype">
+	</bean>	
+	
+	<bean id="epaperCalendarPage" parent="genericGetPage" class="thinkpanda.mingpao.EpaperCalendarPage" scope="prototype">
+	</bean>	
+	
+	<bean id="epaperIssuePage" parent="genericGetPage" class="thinkpanda.mingpao.EpaperIssuePage" scope="prototype">
+	</bean>	
+
+
+</beans>

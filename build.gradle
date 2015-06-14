@@ -1,0 +1,46 @@
+group 'tp-mingpao'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'gradle-one-jar'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // https://github.com/rholder/gradle-one-jar
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        plugin(MavenPublication) {
+            from components.java
+            artifactId "pit-autoweb"
+        }
+    }
+}
+
+task archiveJar(type: OneJar) {
+    mainClass = 'thinkpanda.mingpao.Main'
+}
+
+artifacts {
+    archives archiveJar
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group:'pit-autoweb', name:'pit-autoweb', version: '1.0-SNAPSHOT'
+}

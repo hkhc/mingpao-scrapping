@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:util="http://www.springframework.org/schema/util"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+							http://www.springframework.org/schema/util
+							http://www.springframework.org/schema/util/spring-util-2.5.xsd
+							">
+
+	<bean id="htmlUnitHelper" class="com.pithk.autoweb.util.HtmlUnitHelper"/>
+
+	<bean id="xpathPageMatcher" abstract="true" class="com.pithk.autoweb.XPathPageMatcher">
+		<property name="htmlUnitHelper" ref="htmlUnitHelper"/>
+	</bean>
+
+	<bean id="dummyPageMatcher" abstract="true" class="com.pithk.autoweb.DummyPageMatcher">
+	</bean>
+		
+	<bean id="genericSite" abstract="true" class="com.pithk.autoweb.GenericSite" scope="singleton">
+		<property name="htmlUnitHelper" ref="htmlUnitHelper"/>
+	</bean>
+
+	<bean id="genericGetPage" abstract="true" class="com.pithk.autoweb.spi.commons.GenericGetPage" scope="singleton">
+		<property name="htmlUnitHelper" ref="htmlUnitHelper"/>
+	</bean>
+
+	<bean id="genericRegistry" abstract="true" class="com.pithk.autoweb.PageRegistry">
+	</bean>
+	
+	<bean id="sourceLocator" class="com.pithk.autoweb.SourceLocator">
+		<property name="siteConfigPattern" value="%SOURCE%Site"/>
+	</bean>
+
+
+</beans>
