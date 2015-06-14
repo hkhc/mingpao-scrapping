@@ -1,7 +1,5 @@
 package thinkpanda.mingpao;
 
-import java.io.IOException;
-
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -9,6 +7,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.pithk.autoweb.AutoWebPage;
 import com.pithk.autoweb.spi.commons.GenericGetPage;
+
+import java.io.IOException;
 
 public class MingPaoHomePage extends GenericGetPage {
 	

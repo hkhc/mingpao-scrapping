@@ -1,12 +1,12 @@
 package thinkpanda.mingpao;
 
-import java.io.IOException;
-
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.pithk.autoweb.AutoWebPage;
 import com.pithk.autoweb.GenericPage;
+
+import java.io.IOException;
 
 public class MingPaoMenuPage extends GenericPage {
 	

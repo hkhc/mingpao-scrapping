@@ -1,20 +1,18 @@
 package thinkpanda.mingpao;
 
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.pithk.autoweb.AutoWebPage;
+import com.pithk.autoweb.SourceLocator;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import thinkpanda.mingpao.EpaperIssuePage.EpaperInfo;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import thinkpanda.mingpao.EpaperIssuePage.EpaperInfo;
-
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.pithk.autoweb.AutoWebPage;
-import com.pithk.autoweb.SourceLocator;
 
 public class Main {
 
