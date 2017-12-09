@@ -26,7 +26,8 @@
 								</bean>
 								<bean parent="xpathPageMatcher" >
 									<property name="pageBeanName" value="epaperIssuePage"/>
-									<property name="xpath" value="//div[@style='float: left;']//a[contains(@href,'Content2.cfm')]"/>
+									<property name="xpath" value="//div[@class='number_wrap']/a[./img[contains(@src,'icon_')]]"/>
+									<!--<property name="xpath" value="//div[@style='float: left;']//a[@class='url_link']"/>-->
 								</bean>
 							</list>
 						</property>

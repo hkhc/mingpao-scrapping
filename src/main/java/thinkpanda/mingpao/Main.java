@@ -23,12 +23,22 @@ public class Main {
 
 		System.setProperty("file.encoding", "utf-8");
 		System.setProperty("user.language", "zh");
-		
-		String selectedDate = args[0];
-		String baseDirectory = args[1];
-		String username = args[2];
-		String password = args[3];
-		String startPage = (args.length>=5) ? args[4] : null;
+
+		String selectedDate ;
+		String baseDirectory;
+		String username ;
+		String password ;
+		String startPage;
+
+		String[] finalArgs;
+
+		finalArgs = args;
+
+		selectedDate = finalArgs[0];
+		baseDirectory = finalArgs[1];
+		username = finalArgs[2];
+		password = finalArgs[3];
+		startPage = (finalArgs.length>=5) ? finalArgs[4] : null;
 		startPage = startPage.trim();
 		
 		
@@ -36,7 +46,11 @@ public class Main {
 		System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
 		System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire", "warning");
 		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "warning");
-		
+
+		InputStream iss = Main.class.getClass().getResourceAsStream("config/spring/app-spring.xml");
+		if (iss==null)
+			System.out.println("iss is null");
+
 		ApplicationContext ac = new ClassPathXmlApplicationContext(new String[] {
 				"config/spring/app-spring.xml",
 				"config/spring/autoweb-spring.xml"
@@ -122,7 +136,7 @@ public class Main {
 				else {
 					filename = e.getValue().anchor.asText().replaceAll("\n", "");
 					filename = filename.replaceAll("/", "-");
-					int idx = filename.indexOf("(");
+					int idx = filename.lastIndexOf("(");
 					filename = filename.substring(0,idx-1).trim();
 					filename = e.getValue().pageNumber + "-"+filename;
 				}

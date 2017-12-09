@@ -58,7 +58,7 @@ public class EpaperIssuePage extends GenericPage {
 		
 		sections = new TreeMap<String, HtmlAnchor>();
 		
-		List<? extends HtmlElement> anchors = getHtmlUnitHelper().getNodes("//a[contains(@href,'Content1.cfm') and .//img[contains(@src,'icon_')] ]", getPage());
+		List<? extends HtmlElement> anchors = getHtmlUnitHelper().getNodes("//div[@class='number_wrap']/a[.//img[contains(@src,'icon_')] ]", getPage());
 		if (anchors==null) return null;
 		
 		for(HtmlElement e : anchors) {

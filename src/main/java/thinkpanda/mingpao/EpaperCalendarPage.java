@@ -95,7 +95,7 @@ public class EpaperCalendarPage extends GenericPage {
 	
 	public AutoWebPage getIssue(String c) throws IOException {
 		HtmlAnchor a = calendars.get(c);
-		System.out.println("Get "+c + " ("+a.getAttribute("href")+")");
+		System.out.println("Get "+c + " ("+a.getAttribute("href")+") :");
 
 		if (a==null) {
 			return null;

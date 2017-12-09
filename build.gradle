@@ -1,12 +1,14 @@
 group 'tp-mingpao'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'maven-publish'
 apply plugin: 'gradle-one-jar'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
+
+mainClassName = "thinkpanda.mingpao.Main"
 
 buildscript {
     repositories {
@@ -21,6 +23,11 @@ buildscript {
 repositories {
     mavenLocal()
     mavenCentral()
+}
+
+run {
+    if (System.getProperty("exec.args"))
+        args System.getProperty("exec.args").split()
 }
 
 publishing {
