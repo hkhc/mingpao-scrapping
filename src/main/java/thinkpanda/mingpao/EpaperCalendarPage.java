@@ -4,8 +4,8 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.pithk.autoweb.AutoWebPage;
-import com.pithk.autoweb.GenericPage;
+import io.hkhc.autoweb.AutoWebPage;
+import io.hkhc.autoweb.GenericPage;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,11 +51,11 @@ public class EpaperCalendarPage extends GenericPage {
 		
 	}
 	
-	public String getYear() {
+	public int getYear() {
 		HtmlElement year = (HtmlElement)getHtmlUnitHelper().getSingleNode(".//tr[@align='center']/td[2]", getPage());
-		return year.asText();
+		return Integer.parseInt(year.asText());
 	}
-	
+
 	public AutoWebPage getPreviousYearCalendar() throws IOException {
 
 		HtmlAnchor a = (HtmlAnchor)getHtmlUnitHelper().getSingleNode(".//tr[@align='center']/td[1]/a", getPage());
@@ -93,7 +93,7 @@ public class EpaperCalendarPage extends GenericPage {
 		
 	}
 	
-	public AutoWebPage getIssue(String c) throws IOException {
+	public EpaperIssuePage getIssue(String c) throws IOException {
 		HtmlAnchor a = calendars.get(c);
 		System.out.println("Get "+c + " ("+a.getAttribute("href")+") :");
 
@@ -106,7 +106,7 @@ public class EpaperCalendarPage extends GenericPage {
 			if (p==null)
 				return null;
 			else {
-				return getRegistry().lookup(p);
+				return (EpaperIssuePage)getRegistry().lookup(p);
 			}
 		}
 		catch (FailingHttpStatusCodeException e) {
@@ -114,6 +114,28 @@ public class EpaperCalendarPage extends GenericPage {
 		}	
 		
 		
+	}
+
+	public EpaperCalendarPage toYear(int expectedYear) throws IOException {
+
+		int currentYear = getYear();
+		EpaperCalendarPage cp = this;
+
+		while (expectedYear!=currentYear) {
+			if (expectedYear < currentYear) {
+				System.out.println("Retrieve last year calendar...");
+				cp = (EpaperCalendarPage)cp.getPreviousYearCalendar();
+				currentYear = cp.getYear();
+			}
+			else if (expectedYear > currentYear) {
+				System.out.println("Retrieve next year calendar...");
+				cp = (EpaperCalendarPage)cp.getNextYearCalendar();
+				currentYear = cp.getYear();
+			}
+		}
+
+		return cp;
+
 	}
 	
 }

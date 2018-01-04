@@ -1,6 +1,6 @@
 package thinkpanda.mingpao;
 
-import com.pithk.autoweb.GenericSite;
+import io.hkhc.autoweb.GenericSite;
 
 public class MingPaoSite extends GenericSite {
 

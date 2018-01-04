@@ -1,6 +1,3 @@
-group 'tp-mingpao'
-version '1.0-SNAPSHOT'
-
 apply plugin: 'application'
 apply plugin: 'maven-publish'
 apply plugin: 'gradle-one-jar'
@@ -21,22 +18,15 @@ buildscript {
 }
 
 repositories {
-    mavenLocal()
+    maven {
+        url 'https://dl.bintray.com/hermancheung/maven'
+    }
     mavenCentral()
 }
 
 run {
     if (System.getProperty("exec.args"))
         args System.getProperty("exec.args").split()
-}
-
-publishing {
-    publications {
-        plugin(MavenPublication) {
-            from components.java
-            artifactId "pit-autoweb"
-        }
-    }
 }
 
 task archiveJar(type: OneJar) {
@@ -49,5 +39,6 @@ artifacts {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile group:'pit-autoweb', name:'pit-autoweb', version: '1.0-SNAPSHOT'
+    compile group:'io.hkhc.autoweb', name:'autoweb', version: '1.0'
+    compile group:'io.hkhc', name:'utils-core', version: '1.0'
 }

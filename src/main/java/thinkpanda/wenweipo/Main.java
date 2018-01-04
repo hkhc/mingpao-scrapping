@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import io.hkhc.autoweb.AutoWebPage;
+import io.hkhc.autoweb.SourceLocator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -12,9 +14,6 @@ import thinkpanda.mingpao.EpaperIssuePage;
 import thinkpanda.mingpao.MingPaoHomePage;
 import thinkpanda.mingpao.MingPaoMenuPage;
 import thinkpanda.mingpao.MingPaoSite;
-
-import com.pithk.autoweb.AutoWebPage;
-import com.pithk.autoweb.SourceLocator;
 
 public class Main {
 

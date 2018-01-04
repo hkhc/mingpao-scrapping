@@ -8,8 +8,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.pithk.autoweb.AutoWebPage;
-import com.pithk.autoweb.GenericPage;
+import io.hkhc.autoweb.AutoWebPage;
+import io.hkhc.autoweb.GenericPage;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class EpaperIssuePage extends GenericPage {
 		
 	}
 	
-	public AutoWebPage getSectionPage(String s) throws IOException  {
+	public EpaperIssuePage getSectionPage(String s) throws IOException  {
 
 		if (s.equals(getCurrentSection())) return this;
 		
@@ -88,7 +88,7 @@ public class EpaperIssuePage extends GenericPage {
 			if (resultPage==null)
 				return null;
 			else {
-				return getRegistry().lookup(resultPage);
+				return (EpaperIssuePage)getRegistry().lookup(resultPage);
 			}
 		}
 		catch (FailingHttpStatusCodeException e) {

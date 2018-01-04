@@ -4,27 +4,27 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
 							http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<bean id="htmlUnitHelper" class="com.pithk.autoweb.util.HtmlUnitHelper"/>
+	<bean id="htmlUnitHelper" class="io.hkhc.autoweb.util.HtmlUnitHelper"/>
 
-	<bean id="xpathPageMatcher" abstract="true" class="com.pithk.autoweb.XPathPageMatcher">
+	<bean id="xpathPageMatcher" abstract="true" class="io.hkhc.autoweb.XPathPageMatcher">
 		<property name="htmlUnitHelper" ref="htmlUnitHelper"/>
 	</bean>
 
-	<bean id="dummyPageMatcher" abstract="true" class="com.pithk.autoweb.DummyPageMatcher">
+	<bean id="dummyPageMatcher" abstract="true" class="io.hkhc.autoweb.DummyPageMatcher">
 	</bean>
 		
-	<bean id="genericSite" abstract="true" class="com.pithk.autoweb.GenericSite" scope="singleton">
+	<bean id="genericSite" abstract="true" class="io.hkhc.autoweb.GenericSite" scope="singleton">
 		<property name="htmlUnitHelper" ref="htmlUnitHelper"/>
 	</bean>
 
-	<bean id="genericGetPage" abstract="true" class="com.pithk.autoweb.spi.commons.GenericGetPage" scope="singleton">
+	<bean id="genericGetPage" abstract="true" class="io.hkhc.autoweb.spi.commons.GenericGetPage" scope="singleton">
 		<property name="htmlUnitHelper" ref="htmlUnitHelper"/>
 	</bean>
 
-	<bean id="genericRegistry" abstract="true" class="com.pithk.autoweb.PageRegistry">
+	<bean id="genericRegistry" abstract="true" class="io.hkhc.autoweb.PageRegistry">
 	</bean>
 	
-	<bean id="sourceLocator" class="com.pithk.autoweb.SourceLocator">
+	<bean id="sourceLocator" class="io.hkhc.autoweb.SourceLocator">
 		<property name="siteConfigPattern" value="%SOURCE%Site"/>
 	</bean>
 

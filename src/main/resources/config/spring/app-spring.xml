@@ -8,7 +8,7 @@
 		<property name="registry">
 			<bean parent="genericRegistry">
 				<property name="registryDefinition">
-					<bean class="com.pithk.autoweb.SimpleRegistryDefinition">
+					<bean class="io.hkhc.autoweb.SimpleRegistryDefinition">
 						<property name="matchers">
 							<list>
 								<bean parent="xpathPageMatcher">

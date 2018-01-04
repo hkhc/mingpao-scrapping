@@ -5,14 +5,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.pithk.autoweb.AutoWebPage;
-import com.pithk.autoweb.spi.commons.GenericGetPage;
+import io.hkhc.autoweb.AutoWebPage;
+import io.hkhc.autoweb.spi.commons.GenericGetPage;
 
 import java.io.IOException;
 
 public class MingPaoHomePage extends GenericGetPage {
 	
-	public AutoWebPage login(String username, String password) throws IOException {
+	public MingPaoMenuPage login(String username, String password) throws IOException {
 
 		System.out.println("Login mingpao.com");
 		
@@ -50,7 +50,7 @@ public class MingPaoHomePage extends GenericGetPage {
 			if (resultPage==null)
 				return null;
 			else {
-				return getRegistry().lookup(resultPage);
+				return (MingPaoMenuPage)getRegistry().lookup(resultPage);
 			}
 		}
 		catch (FailingHttpStatusCodeException e) {
