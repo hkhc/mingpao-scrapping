@@ -1,4 +1,4 @@
-package thinkpanda.mingpao;
+package io.hkhc.scrapping.mingpao;
 
 import io.hkhc.autoweb.GenericSite;
 

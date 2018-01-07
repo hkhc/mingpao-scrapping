@@ -1,4 +1,4 @@
-package thinkpanda.mingpao;
+package io.hkhc.scrapping.mingpao;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import io.hkhc.autoweb.AutoWebPage;
 import io.hkhc.autoweb.GenericPage;
 import org.w3c.dom.NodeList;
 
@@ -26,9 +25,14 @@ public class EpaperIssuePage extends GenericPage {
 		String pageNumber;
 		HtmlAnchor anchor;
 	}
-	
+
+	private PageUtils pageUtils;
 	private SortedMap<String,HtmlAnchor> sections = null;
 	private SortedMap<String,EpaperInfo> pages = new TreeMap<String,EpaperInfo>();
+
+	public EpaperIssuePage() {
+		pageUtils = new PageUtils(this);
+	}
 
 	private String getSectionFromQuery(String query) {
 
@@ -56,7 +60,7 @@ public class EpaperIssuePage extends GenericPage {
 	
 	public List<String> getSectionList() {
 		
-		sections = new TreeMap<String, HtmlAnchor>();
+		sections = new TreeMap<>();
 		
 		List<? extends HtmlElement> anchors = getHtmlUnitHelper().getNodes("//div[@class='number_wrap']/a[.//img[contains(@src,'icon_')] ]", getPage());
 		if (anchors==null) return null;
@@ -81,25 +85,13 @@ public class EpaperIssuePage extends GenericPage {
 		
 		if (sections==null) getSectionList();
 		
-		HtmlAnchor anchor = sections.get(s);
-		
-		try {
-			HtmlPage resultPage = anchor.click();
-			if (resultPage==null)
-				return null;
-			else {
-				return (EpaperIssuePage)getRegistry().lookup(resultPage);
-			}
-		}
-		catch (FailingHttpStatusCodeException e) {
-			return null;
-		}	
-		
+		return (EpaperIssuePage)pageUtils.click(sections.get(s));
+
 	}
 
 	public SortedMap<String,EpaperInfo> getPages() {
 		
-		pages = new TreeMap<String,EpaperInfo>();
+		pages = new TreeMap<>();
 		
 		List<? extends HtmlElement> pageBlocks = getHtmlUnitHelper().getNodes("//div[@style='float: left;']//a[1]", getPage());
 		
@@ -148,7 +140,7 @@ public class EpaperIssuePage extends GenericPage {
 
 		Page imagePage = null;
 		try {
-			imagePage = ((HtmlAnchor)suppLink).click();
+			imagePage = suppLink.click();
 			UnexpectedPage up = (UnexpectedPage)imagePage;
 			if (imagePage==null)
 				return null ;

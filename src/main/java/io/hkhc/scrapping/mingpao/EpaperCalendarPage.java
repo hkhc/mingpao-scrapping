@@ -1,10 +1,7 @@
-package thinkpanda.mingpao;
+package io.hkhc.scrapping.mingpao;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import io.hkhc.autoweb.AutoWebPage;
 import io.hkhc.autoweb.GenericPage;
 
 import java.io.IOException;
@@ -15,8 +12,14 @@ import java.util.TreeMap;
 
 public class EpaperCalendarPage extends GenericPage {
 
+	private PageUtils pageUtils;
+
 	private SortedMap<String,HtmlAnchor> calendars = new TreeMap<String,HtmlAnchor>();
-	
+
+	public EpaperCalendarPage() {
+		pageUtils = new PageUtils(this);
+	}
+
 	public Map<String,HtmlAnchor> getAvailableDate() {
 		
 		System.out.println("getAvailableDate");
@@ -56,64 +59,25 @@ public class EpaperCalendarPage extends GenericPage {
 		return Integer.parseInt(year.asText());
 	}
 
-	public AutoWebPage getPreviousYearCalendar() throws IOException {
+	public EpaperCalendarPage getPreviousYearCalendar() throws IOException {
 
-		HtmlAnchor a = (HtmlAnchor)getHtmlUnitHelper().getSingleNode(".//tr[@align='center']/td[1]/a", getPage());
-		
-		try {
-			HtmlPage p = a.click();
-			if (p==null)
-				return null;
-			else {
-				return getRegistry().lookup(p);
-			}
-		}
-		catch (FailingHttpStatusCodeException e) {
-			return null;
-		}	
-		
-		
+		return (EpaperCalendarPage)pageUtils.click(".//tr[@align='center']/td[1]/a");
+
 	}
 
-	public AutoWebPage getNextYearCalendar() throws IOException {
+	public EpaperCalendarPage getNextYearCalendar() throws IOException {
 
-		HtmlAnchor a = (HtmlAnchor)getHtmlUnitHelper().getSingleNode(".//tr[@align='center']/td[3]/a", getPage());
-		
-		try {
-			HtmlPage p = a.click();
-			if (p==null)
-				return null;
-			else {
-				return getRegistry().lookup(p);
-			}
-		}
-		catch (FailingHttpStatusCodeException e) {
-			return null;
-		}	
-		
+		return (EpaperCalendarPage)pageUtils.click(".//tr[@align='center']/td[3]/a");
+
 	}
 	
 	public EpaperIssuePage getIssue(String c) throws IOException {
+
 		HtmlAnchor a = calendars.get(c);
 		System.out.println("Get "+c + " ("+a.getAttribute("href")+") :");
 
-		if (a==null) {
-			return null;
-		}
-		
-		try {
-			HtmlPage p = a.click();
-			if (p==null)
-				return null;
-			else {
-				return (EpaperIssuePage)getRegistry().lookup(p);
-			}
-		}
-		catch (FailingHttpStatusCodeException e) {
-			return null;
-		}	
-		
-		
+		return (EpaperIssuePage)pageUtils.click(a);
+
 	}
 
 	public EpaperCalendarPage toYear(int expectedYear) throws IOException {
@@ -124,14 +88,13 @@ public class EpaperCalendarPage extends GenericPage {
 		while (expectedYear!=currentYear) {
 			if (expectedYear < currentYear) {
 				System.out.println("Retrieve last year calendar...");
-				cp = (EpaperCalendarPage)cp.getPreviousYearCalendar();
-				currentYear = cp.getYear();
+				cp = cp.getPreviousYearCalendar();
 			}
 			else if (expectedYear > currentYear) {
 				System.out.println("Retrieve next year calendar...");
-				cp = (EpaperCalendarPage)cp.getNextYearCalendar();
-				currentYear = cp.getYear();
+				cp = cp.getNextYearCalendar();
 			}
+			currentYear = cp.getYear();
 		}
 
 		return cp;

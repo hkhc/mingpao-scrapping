@@ -4,7 +4,7 @@
 		xsi:schemaLocation="http://www.springframework.org/schema/beans
 							http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<bean id="mingPaoSite" parent="genericSite" class="thinkpanda.mingpao.MingPaoSite" scope="prototype">
+	<bean id="mingPaoSite" parent="genericSite" class="io.hkhc.scrapping.mingpao.MingPaoSite" scope="prototype">
 		<property name="registry">
 			<bean parent="genericRegistry">
 				<property name="registryDefinition">
@@ -41,16 +41,16 @@
 		
 	</bean>
 
-	<bean id="homePage" parent="genericGetPage" class="thinkpanda.mingpao.MingPaoHomePage" scope="prototype">
+	<bean id="homePage" parent="genericGetPage" class="io.hkhc.scrapping.mingpao.MingPaoHomePage" scope="prototype">
 	</bean>	
 
-	<bean id="menuPage" parent="genericGetPage" class="thinkpanda.mingpao.MingPaoMenuPage" scope="prototype">
+	<bean id="menuPage" parent="genericGetPage" class="io.hkhc.scrapping.mingpao.MingPaoMenuPage" scope="prototype">
 	</bean>	
 	
-	<bean id="epaperCalendarPage" parent="genericGetPage" class="thinkpanda.mingpao.EpaperCalendarPage" scope="prototype">
+	<bean id="epaperCalendarPage" parent="genericGetPage" class="io.hkhc.scrapping.mingpao.EpaperCalendarPage" scope="prototype">
 	</bean>	
 	
-	<bean id="epaperIssuePage" parent="genericGetPage" class="thinkpanda.mingpao.EpaperIssuePage" scope="prototype">
+	<bean id="epaperIssuePage" parent="genericGetPage" class="io.hkhc.scrapping.mingpao.EpaperIssuePage" scope="prototype">
 	</bean>	
 
 

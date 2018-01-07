@@ -1,27 +1,20 @@
-apply plugin: 'application'
-apply plugin: 'maven-publish'
-apply plugin: 'gradle-one-jar'
-
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
-
-mainClassName = "thinkpanda.mingpao.Main"
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        // https://github.com/rholder/gradle-one-jar
-        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
-    }
+plugins {
+    id "application"
+    id "maven-publish"
+    id "com.github.onslip.gradle-one-jar" version "1.0.5"
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+mainClassName = "io.hkhc.scrapping.mingpao.Main"
+
 repositories {
+    jcenter()
+    mavenCentral()
     maven {
         url 'https://dl.bintray.com/hermancheung/maven'
     }
-    mavenCentral()
 }
 
 run {
@@ -30,7 +23,7 @@ run {
 }
 
 task archiveJar(type: OneJar) {
-    mainClass = 'thinkpanda.mingpao.Main'
+    mainClass = 'io.hkhc.scrapping.mingpao.Main'
 }
 
 artifacts {
@@ -38,7 +31,10 @@ artifacts {
 }
 
 dependencies {
+    // configuration '*implementation' is not compatible with one-jar plugin 1.0.5
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile group:'io.hkhc.autoweb', name:'autoweb', version: '1.0'
-    compile group:'io.hkhc', name:'utils-core', version: '1.0'
+    compile group:'io.hkhc', name:'utils-core', version: '1.0.1'
+    compile group:'org.apache.pdfbox', name:'pdfbox', version: '2.0.8'
+    compile group:'com.beust', name:'jcommander', version: '1.72'
 }
