@@ -53,7 +53,7 @@ public class Main {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		System.setProperty("file.encoding", "utf-8");
 		System.setProperty("user.language", "zh");
@@ -87,7 +87,7 @@ public class Main {
 
 		if (arg.startPage!=null) scrapper.startPage(arg.startPage);
 
-//		scrapper.scrap();
+		scrapper.scrap();
 
 
 	}

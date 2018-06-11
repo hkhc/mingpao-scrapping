@@ -12,9 +12,6 @@ mainClassName = "io.hkhc.scrapping.mingpao.Main"
 repositories {
     jcenter()
     mavenCentral()
-    maven {
-        url 'https://dl.bintray.com/hermancheung/maven'
-    }
 }
 
 run {
