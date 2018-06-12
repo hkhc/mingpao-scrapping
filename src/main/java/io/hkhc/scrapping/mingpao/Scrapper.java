@@ -122,7 +122,7 @@ public class Scrapper {
         }
 
         target.finish();
-        target.saveDocument(new FileOutputStream(targetDirStr+"/mingpao.pdf"));
+        target.saveDocument(new FileOutputStream(targetDirStr+"/mingpao-"+selectedDate+".pdf"));
         target.cleanup();
 
     }
