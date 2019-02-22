@@ -14,7 +14,9 @@ public class MingPaoMenuPage extends GenericPage {
 
 	public EpaperCalendarPage getEpaperCalendarPage() throws IOException {
 		
-		return (EpaperCalendarPage)pageUtils.click("//a[contains(@href,'javascript:popupWindow') and contains(@href,'Epaper1.cfm')]");
+		return (EpaperCalendarPage)pageUtils.click(
+				"//a[contains(@href,'javascript:popupWindow') and contains(@href,'epaper.mingpao.com/index1.htm')]"
+		);
 
 	}
 

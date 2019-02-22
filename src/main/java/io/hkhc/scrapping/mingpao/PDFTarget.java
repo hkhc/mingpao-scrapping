@@ -34,28 +34,11 @@ public class PDFTarget {
 
     }
 
-    public void addPage(String pageName, InputStream imageStream) throws IOException {
+    public void addPage(String pageName, String filename) throws IOException {
 
-        byte[] imageBytes = null;
-
-        try {
-
-            ByteArrayOutputStream tempImage = new ByteArrayOutputStream();
-            FileUtils.writeStreamToStream(tempImage, imageStream);
-            imageBytes = tempImage.toByteArray();
-
-        }
-        finally {
-            imageStream.close();
-        }
-
-        BufferedImage bimg = ImageIO.read(new ByteArrayInputStream(imageBytes));
-        float width = bimg.getWidth();
-        float height = bimg.getHeight();
-        PDPage page = new PDPage(new PDRectangle(width, height));
+        PDImageXObject img = PDImageXObject.createFromFile(filename, document);
+        PDPage page = new PDPage(new PDRectangle(img.getWidth(), img.getHeight()));
         document.addPage(page);
-
-        PDImageXObject img = PDImageXObject.createFromByteArray(document, imageBytes, pageName);
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
         contentStream.drawImage(img, 0, 0);
         contentStream.close();

@@ -116,7 +116,7 @@ public class Scrapper {
                                 .progressCallback(count -> System.out.print("#")));
                 System.out.println();
 
-                target.addPage(pageName, new FileInputStream(filename));
+                target.addPage(pageName, filename);
 
             }
         }

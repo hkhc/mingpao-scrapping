@@ -18,7 +18,7 @@
 								</bean>
 								<bean parent="xpathPageMatcher">
 									<property name="pageBeanName" value="menuPage"/>
-									<property name="xpath" value="//a[contains(@href,'javascript:popupWindow') and contains(@href,'Epaper1.cfm')]"/>
+									<property name="xpath" value="//a[contains(@href,'javascript:popupWindow') and contains(@href,'epaper.mingpao.com/index1.htm')]"/>
 								</bean>
 								<bean parent="xpathPageMatcher" >
 									<property name="pageBeanName" value="epaperCalendarPage"/>
