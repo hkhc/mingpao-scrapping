@@ -6,7 +6,6 @@ import io.hkhc.utils.FileUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,9 +91,17 @@ public class Scrapper {
         List<String> sections = ip.getSectionList();
         for(String s : sections) {
             System.out.println("Get Section " + s);
-            ip = ip.getSectionPage(s);
+            ip.refeshSectionList(s);
+            ip = ip.getPageForSection(s);
+            ip.getSectionList();
+
             Map<String,EpaperIssuePage.EpaperInfo> pages = ip.getPages();
             for(Map.Entry<String, EpaperIssuePage.EpaperInfo> e : pages.entrySet()) {
+
+                EpaperIssuePage issuePage = ip;
+
+                EpaperIssuePage singlePage = issuePage.getPage(e.getValue().pageNumber);
+                singlePage = singlePage.toV4();
 
                 String pageKey = e.getKey();;
                 EpaperIssuePage.EpaperInfo pageInfo = e.getValue();
@@ -107,16 +114,22 @@ public class Scrapper {
 
                 String filename = targetDirStr+"/mingpao-"+pageName+".jpg";
 
-                FileOutputStream fos = new FileOutputStream(filename);
-                // TODO add progress indicator
-                // TODO custom buffer size (		int bufferSize = 102400;)
-                FileUtils.writeStreamToStream(fos, ip.getPageImage(pageKey),
-                        new FileOptions()
-                                .bufferSize(102400)
-                                .progressCallback(count -> System.out.print("#")));
+                InputStream imageStream = issuePage.getPageImage(pageKey);
+                if (imageStream!=null) {
+                    FileOutputStream fos = new FileOutputStream(filename);
+                    FileUtils.writeStreamToStream(fos, imageStream,
+                            new FileOptions()
+                                    .bufferSize(102400)
+                                    .progressCallback(count -> System.out.print("#")));
+                    target.addPage(pageName, filename);
+                }
+                else
+                    System.out.println("image is not found");
                 System.out.println();
 
-                target.addPage(pageName, filename);
+                ip = issuePage.getPageForSection(s);
+                ip.getSectionList();
+                ip.getPages();
 
             }
         }

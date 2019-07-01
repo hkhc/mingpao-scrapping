@@ -34,4 +34,5 @@ dependencies {
     compile group:'io.hkhc', name:'utils-core', version: '1.0.1'
     compile group:'org.apache.pdfbox', name:'pdfbox', version: '2.0.8'
     compile group:'com.beust', name:'jcommander', version: '1.72'
+    compileOnly 'org.jetbrains:annotations:17.0.0'
 }
