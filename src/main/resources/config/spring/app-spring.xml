@@ -12,9 +12,14 @@
 						<property name="matchers">
 							<list>
 								<bean parent="xpathPageMatcher">
+									<property name="pageBeanName" value="landingPage"/>
+									<!-- //form[@method='post' and contains(@action,'EpaperLogin2.cfm')]-->
+									<property name="xpath" value="//li[@id='headerlogin']/a"/>
+								</bean>
+								<bean parent="xpathPageMatcher">
 									<property name="pageBeanName" value="homePage"/>
 									<!-- //form[@method='post' and contains(@action,'EpaperLogin2.cfm')]-->
-									<property name="xpath" value="//form[@method='post' and contains(@action,'EpaperLogin2.cfm')]"/>
+									<property name="xpath" value="//form[@method='post' and contains(@action,'../php/login2.php')]"/>
 								</bean>
 								<bean parent="xpathPageMatcher">
 									<property name="pageBeanName" value="menuPage"/>
@@ -38,7 +43,10 @@
 
 		<!-- <property name="startUrl" value="http://premium.mingpao.com/cfm/mem_Login1.cfm?SuccessUrl=%2Fcfm%2FEpaper1%2Ecfm%3F"/>-->
     	<property name="startUrl" value="http://premium.mingpao.com"/>
-		
+
+	</bean>
+
+	<bean id="landingPage" parent="genericGetPage" class="io.hkhc.scrapping.mingpao.MingPaoLandingPage" scope="prototype">
 	</bean>
 
 	<bean id="homePage" parent="genericGetPage" class="io.hkhc.scrapping.mingpao.MingPaoHomePage" scope="prototype">

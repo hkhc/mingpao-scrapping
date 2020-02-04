@@ -66,11 +66,10 @@ public class Scrapper {
         MingPaoSite site = (MingPaoSite)sourceLocator.getSite("mingPao");
         site.setJavascriptEnabled(true);
 
-        MingPaoHomePage hp = (MingPaoHomePage)site.getCurrentPage();
-        MingPaoMenuPage mp = hp.login(username, password);
+        MingPaoLandingPage lp = (MingPaoLandingPage)site.getCurrentPage();
 
-        System.out.println("Retrieve Calendar year");
-        EpaperCalendarPage cp = mp.getEpaperCalendarPage();
+        MingPaoHomePage hp = (MingPaoHomePage)lp.loginPage();
+        EpaperCalendarPage cp = hp.login(username, password);
 
         int expectedYear = Integer.parseInt(selectedDate.substring(0,4));
         cp = cp.toYear(expectedYear);
