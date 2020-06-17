@@ -1,8 +1,11 @@
 package io.hkhc.scrapping.mingpao;
 
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import io.hkhc.autoweb.GenericPage;
+import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +37,7 @@ public class EpaperCalendarPage extends GenericPage {
 			HtmlElement date = (HtmlElement)getHtmlUnitHelper().getSingleNode(".//tr[1]", monthBlock);
 			String dateStr = date.asText();
 			year = Integer.parseInt(dateStr.substring(0,4));
-			month = Integer.parseInt(dateStr.substring(5,dateStr.length()-1));
+			month = Integer.parseInt(dateStr.substring(5,dateStr.length()-1).trim());
 			System.out.println("year " + year + " month " + month);
 			
 			List<? extends HtmlElement> days = getHtmlUnitHelper().getNodes(".//a[@target='mpepaper']", monthBlock);
@@ -74,9 +77,9 @@ public class EpaperCalendarPage extends GenericPage {
 	public EpaperIssuePage getIssue(String c) throws IOException {
 
 		HtmlAnchor a = calendars.get(c);
-		System.out.println("Get "+c + " ("+a.getAttribute("href")+") :");
 
-		return (EpaperIssuePage)pageUtils.click(a);
+		System.out.println("Get " + c + " (" + a.getAttribute("href") + ") :");
+		return (EpaperIssuePage) pageUtils.click(a);
 
 	}
 

@@ -6,10 +6,11 @@ import io.hkhc.utils.FileUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,15 @@ public class Scrapper {
         return this;
     }
 
+    class PageInfo {
+        String pageName;
+        String fileName;
+        public PageInfo(String pageName, String filename) {
+            this.pageName = pageName;
+            this.fileName = filename;
+        }
+    }
+
     public void scrap() throws IOException {
 
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
@@ -67,11 +77,10 @@ public class Scrapper {
         MingPaoSite site = (MingPaoSite)sourceLocator.getSite("mingPao");
         site.setJavascriptEnabled(true);
 
-        MingPaoHomePage hp = (MingPaoHomePage)site.getCurrentPage();
-        MingPaoMenuPage mp = hp.login(username, password);
+        MingPaoLandingPage lp = (MingPaoLandingPage)site.getCurrentPage();
 
-        System.out.println("Retrieve Calendar year");
-        EpaperCalendarPage cp = mp.getEpaperCalendarPage();
+        MingPaoHomePage hp = (MingPaoHomePage)lp.loginPage();
+        EpaperCalendarPage cp = hp.login(username, password);
 
         int expectedYear = Integer.parseInt(selectedDate.substring(0,4));
         cp = cp.toYear(expectedYear);
@@ -89,12 +98,24 @@ public class Scrapper {
         PDFTarget target = new PDFTarget();
         target.start();
 
+        Map<String, List<PageInfo>> sectionPageMap = new HashMap();
+
         List<String> sections = ip.getSectionList();
         for(String s : sections) {
             System.out.println("Get Section " + s);
-            ip = ip.getSectionPage(s);
+            ip.refeshSectionList(s);
+            ip = ip.getPageForSection(s);
+            ip.getSectionList();
+
+            sectionPageMap.put(s, new ArrayList());
+
             Map<String,EpaperIssuePage.EpaperInfo> pages = ip.getPages();
             for(Map.Entry<String, EpaperIssuePage.EpaperInfo> e : pages.entrySet()) {
+
+                EpaperIssuePage issuePage = ip;
+
+                EpaperIssuePage singlePage = issuePage.getPage(e.getValue().pageNumber);
+                singlePage = singlePage.toV4();
 
                 String pageKey = e.getKey();;
                 EpaperIssuePage.EpaperInfo pageInfo = e.getValue();
@@ -107,16 +128,23 @@ public class Scrapper {
 
                 String filename = targetDirStr+"/mingpao-"+pageName+".jpg";
 
-                FileOutputStream fos = new FileOutputStream(filename);
-                // TODO add progress indicator
-                // TODO custom buffer size (		int bufferSize = 102400;)
-                FileUtils.writeStreamToStream(fos, ip.getPageImage(pageKey),
-                        new FileOptions()
-                                .bufferSize(102400)
-                                .progressCallback(count -> System.out.print("#")));
+                InputStream imageStream = issuePage.getPageImage(pageKey);
+                if (imageStream!=null) {
+                    FileOutputStream fos = new FileOutputStream(filename);
+                    FileUtils.writeStreamToStream(fos, imageStream,
+                            new FileOptions()
+                                    .bufferSize(102400)
+                                    .progressCallback(count -> System.out.print("#")));
+                    target.addPage(pageName, filename);
+                    sectionPageMap.get(s).add(new PageInfo(pageName, filename));
+                }
+                else
+                    System.out.println("image is not found");
                 System.out.println();
 
-                target.addPage(pageName, filename);
+                ip = issuePage.getPageForSection(s);
+                ip.getSectionList();
+                ip.getPages();
 
             }
         }
@@ -124,6 +152,27 @@ public class Scrapper {
         target.finish();
         target.saveDocument(new FileOutputStream(targetDirStr+"/mingpao-"+selectedDate+".pdf"));
         target.cleanup();
+
+        List<String> subpapers = new ArrayList();
+        subpapers.add("E");
+        subpapers.add("F");
+        subpapers.add("G");
+        subpapers.add("Z");
+
+        for(Map.Entry<String, List<PageInfo>> entry: sectionPageMap.entrySet()) {
+            if (subpapers.contains(entry.getKey()) && !entry.getValue().isEmpty()) {
+                PDFTarget subTarget = new PDFTarget();
+                subTarget.start();
+                for(PageInfo info: entry.getValue()) {
+                    subTarget.addPage(info.pageName, info.fileName);
+                }
+                subTarget.finish();
+                subTarget.saveDocument(
+                        new FileOutputStream(targetDirStr+"/mingpao-"+entry.getValue().get(0).pageName+".pdf")
+                );
+                subTarget.cleanup();
+            }
+        }
 
     }
 

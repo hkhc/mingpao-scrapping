@@ -1,8 +1,6 @@
 package io.hkhc.scrapping.mingpao;
 
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import io.hkhc.autoweb.spi.commons.GenericGetPage;
 
 import java.io.IOException;
@@ -15,11 +13,11 @@ public class MingPaoHomePage extends GenericGetPage {
 		pageUtils = new PageUtils(this);
 	}
 
-	public MingPaoMenuPage login(String username, String password) throws IOException {
+	public EpaperCalendarPage login(String username, String password) throws IOException {
 
 		System.out.println("Login mingpao.com");
 		
-		HtmlForm searchForm = (HtmlForm)getHtmlUnitHelper().getSingleNode("//form[@method='post' and contains(@action,'EpaperLogin2.cfm')]", getPage());
+		HtmlForm searchForm = (HtmlForm)getHtmlUnitHelper().getSingleNode("//form[@method='post' and contains(@action,'../php/login2.php')]", getPage());
 		if (searchForm==null) {
 			System.out.println("Login form is not found");
 			return null;
@@ -32,9 +30,12 @@ public class MingPaoHomePage extends GenericGetPage {
 		HtmlInput passwordField = searchForm.getInputByName("Password");
 		passwordField.setValueAttribute(password);
 
-		HtmlSubmitInput submitField = (HtmlSubmitInput)getHtmlUnitHelper().getSingleNode(".//input[@type='submit']", searchForm);
+		HtmlRadioButtonInput landingField = searchForm.getRadioButtonsByName("Landing").get(1);
+		landingField.setChecked(true);
 
-		return (MingPaoMenuPage)pageUtils.click(submitField);
+		HtmlButton submitField = (HtmlButton)getHtmlUnitHelper().getSingleNode(".//button[@type='submit']", searchForm);
+
+		return (EpaperCalendarPage)pageUtils.click(submitField);
 
 	}
 
