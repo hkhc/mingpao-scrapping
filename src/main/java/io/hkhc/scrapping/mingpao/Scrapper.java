@@ -9,6 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +45,15 @@ public class Scrapper {
     public Scrapper outputDirectory(String outputDirectory) {
         this.outputDirectory = outputDirectory;
         return this;
+    }
+
+    class PageInfo {
+        String pageName;
+        String fileName;
+        public PageInfo(String pageName, String filename) {
+            this.pageName = pageName;
+            this.fileName = filename;
+        }
     }
 
     public void scrap() throws IOException {
@@ -87,12 +98,16 @@ public class Scrapper {
         PDFTarget target = new PDFTarget();
         target.start();
 
+        Map<String, List<PageInfo>> sectionPageMap = new HashMap();
+
         List<String> sections = ip.getSectionList();
         for(String s : sections) {
             System.out.println("Get Section " + s);
             ip.refeshSectionList(s);
             ip = ip.getPageForSection(s);
             ip.getSectionList();
+
+            sectionPageMap.put(s, new ArrayList());
 
             Map<String,EpaperIssuePage.EpaperInfo> pages = ip.getPages();
             for(Map.Entry<String, EpaperIssuePage.EpaperInfo> e : pages.entrySet()) {
@@ -121,6 +136,7 @@ public class Scrapper {
                                     .bufferSize(102400)
                                     .progressCallback(count -> System.out.print("#")));
                     target.addPage(pageName, filename);
+                    sectionPageMap.get(s).add(new PageInfo(pageName, filename));
                 }
                 else
                     System.out.println("image is not found");
@@ -136,6 +152,27 @@ public class Scrapper {
         target.finish();
         target.saveDocument(new FileOutputStream(targetDirStr+"/mingpao-"+selectedDate+".pdf"));
         target.cleanup();
+
+        List<String> subpapers = new ArrayList();
+        subpapers.add("E");
+        subpapers.add("F");
+        subpapers.add("G");
+        subpapers.add("Z");
+
+        for(Map.Entry<String, List<PageInfo>> entry: sectionPageMap.entrySet()) {
+            if (subpapers.contains(entry.getKey()) && !entry.getValue().isEmpty()) {
+                PDFTarget subTarget = new PDFTarget();
+                subTarget.start();
+                for(PageInfo info: entry.getValue()) {
+                    subTarget.addPage(info.pageName, info.fileName);
+                }
+                subTarget.finish();
+                subTarget.saveDocument(
+                        new FileOutputStream(targetDirStr+"/mingpao-"+entry.getValue().get(0).pageName+".pdf")
+                );
+                subTarget.cleanup();
+            }
+        }
 
     }
 

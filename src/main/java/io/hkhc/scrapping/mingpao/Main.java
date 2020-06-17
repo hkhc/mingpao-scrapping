@@ -77,6 +77,8 @@ public class Main {
 			return;
 		}
 
+		System.out.println("baseDirectory " + arg.baseDirectory);
+		System.out.println("date " + arg.selectedDate);
 		FileUtils.ensureDirectory(arg.baseDirectory);
 
 		Scrapper scrapper = new Scrapper()
