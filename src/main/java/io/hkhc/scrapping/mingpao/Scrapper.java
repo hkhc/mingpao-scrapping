@@ -56,16 +56,20 @@ public class Scrapper {
         }
     }
 
-    public void scrap() throws IOException {
-
+    private void configure() {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire", "warning");
         System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "warning");
+    }
+
+    public void scrap() throws IOException {
+
+        configure();
 
         InputStream iss = Main.class.getClass().getResourceAsStream("config/spring/app-spring.xml");
         if (iss==null)
-            System.out.println("iss is null");
+            System.out.println("config/spring/app-spring.xml is not available");
 
         ApplicationContext ac = new ClassPathXmlApplicationContext(new String[] {
                 "config/spring/app-spring.xml",
@@ -101,13 +105,13 @@ public class Scrapper {
         Map<String, List<PageInfo>> sectionPageMap = new HashMap();
 
         List<String> sections = ip.getSectionList();
-        for(String s : sections) {
-            System.out.println("Get Section " + s);
-            ip.refeshSectionList(s);
-            ip = ip.getPageForSection(s);
+        for(String section : sections) {
+            System.out.println("Get Section " + section);
+            ip.refeshSectionList(section);
+            ip = ip.getPageForSection(section);
             ip.getSectionList();
 
-            sectionPageMap.put(s, new ArrayList());
+            sectionPageMap.put(section, new ArrayList());
 
             Map<String,EpaperIssuePage.EpaperInfo> pages = ip.getPages();
             for(Map.Entry<String, EpaperIssuePage.EpaperInfo> e : pages.entrySet()) {
@@ -136,13 +140,13 @@ public class Scrapper {
                                     .bufferSize(102400)
                                     .progressCallback(count -> System.out.print("#")));
                     target.addPage(pageName, filename);
-                    sectionPageMap.get(s).add(new PageInfo(pageName, filename));
+                    sectionPageMap.get(section).add(new PageInfo(pageName, filename));
                 }
                 else
                     System.out.println("image is not found");
                 System.out.println();
 
-                ip = issuePage.getPageForSection(s);
+                ip = issuePage.getPageForSection(section);
                 ip.getSectionList();
                 ip.getPages();
 
@@ -154,25 +158,38 @@ public class Scrapper {
         target.cleanup();
 
         List<String> subpapers = new ArrayList();
-        subpapers.add("E");
-        subpapers.add("F");
-        subpapers.add("G");
-        subpapers.add("Z");
+        subpapers.add("通通識");
+        subpapers.add("智叻中文Smarties'");
+        subpapers.add("常識天下");
+        subpapers.add("Smarties' Power English");
 
-        for(Map.Entry<String, List<PageInfo>> entry: sectionPageMap.entrySet()) {
-            if (subpapers.contains(entry.getKey()) && !entry.getValue().isEmpty()) {
-                PDFTarget subTarget = new PDFTarget();
-                subTarget.start();
-                for(PageInfo info: entry.getValue()) {
-                    subTarget.addPage(info.pageName, info.fileName);
+        for(String sub : subpapers ) {
+            for(Map.Entry<String, List<PageInfo>> entry: sectionPageMap.entrySet()) {
+
+                if (sectionMatch(entry.getValue(), sub)) {
+                    PDFTarget subTarget = new PDFTarget();
+                    subTarget.start();
+                    for(PageInfo info: entry.getValue()) {
+                        subTarget.addPage(info.pageName, info.fileName);
+                    }
+                    subTarget.finish();
+                    subTarget.saveDocument(
+                            new FileOutputStream(targetDirStr+"/mingpao-"+selectedDate+"-"+sub+".pdf")
+                    );
+                    subTarget.cleanup();
                 }
-                subTarget.finish();
-                subTarget.saveDocument(
-                        new FileOutputStream(targetDirStr+"/mingpao-"+entry.getValue().get(0).pageName+".pdf")
-                );
-                subTarget.cleanup();
+
             }
         }
+
+    }
+
+    private Boolean sectionMatch(List<PageInfo> pages, String name)  {
+
+        for(PageInfo p: pages) {
+            if (p.pageName.contains(name)) return true;
+        }
+        return false;
 
     }
 

@@ -191,10 +191,10 @@ public class EpaperIssuePage extends GenericPage {
 		try {
 			imagePage = suppLink.click();
 			System.out.println("page class " + imagePage.getClass().getName());
-			System.out.println("page result header ");
-			for(NameValuePair pair : imagePage.getWebResponse().getResponseHeaders()) {
-				System.out.println(pair.getName() + " : " + pair.getValue());
-			}
+//			System.out.println("page result header ");
+//			for(NameValuePair pair : imagePage.getWebResponse().getResponseHeaders()) {
+//				System.out.println(pair.getName() + " : " + pair.getValue());
+//			}
 			if (imagePage instanceof TextPage) {
 				System.out.println("text page");
 				System.out.println(((TextPage)imagePage).getContent());

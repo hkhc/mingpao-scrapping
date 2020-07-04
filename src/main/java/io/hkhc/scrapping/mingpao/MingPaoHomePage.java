@@ -30,10 +30,19 @@ public class MingPaoHomePage extends GenericGetPage {
 		HtmlInput passwordField = searchForm.getInputByName("Password");
 		passwordField.setValueAttribute(password);
 
-		HtmlRadioButtonInput landingField = searchForm.getRadioButtonsByName("Landing").get(1);
-		landingField.setChecked(true);
+//		HtmlRadioButtonInput landingField = searchForm.getRadioButtonsByName("Landing").get(1);
+//		landingField.setChecked(true);
 
-		HtmlButton submitField = (HtmlButton)getHtmlUnitHelper().getSingleNode(".//button[@type='submit']", searchForm);
+		HtmlHiddenInput landing = (HtmlHiddenInput)searchForm.getInputByName("Landing");
+		landing.setValueAttribute("EPAPER");
+
+		HtmlHiddenInput successUrl = (HtmlHiddenInput)searchForm.getInputByName("SuccessURL");
+		successUrl.setValueAttribute("https://epaper.mingpao.com/calendar.aspx?entryportal=news2");
+
+
+		HtmlButton submitField = (HtmlButton)getHtmlUnitHelper()
+				.getSingleNode(".//button[@type='submit' and contains(@onclick, 'EPAPER')]", searchForm);
+
 
 		return (EpaperCalendarPage)pageUtils.click(submitField);
 
