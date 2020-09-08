@@ -88,7 +88,7 @@ public class Scrapper {
 
         int expectedYear = Integer.parseInt(selectedDate.substring(0,4));
         cp = cp.toYear(expectedYear);
-        cp.getAvailableDate();
+        cp.loadAvailableDatesOfCurrentYear();
 
         EpaperIssuePage ip = cp.getIssue(selectedDate);
         if (ip==null) {

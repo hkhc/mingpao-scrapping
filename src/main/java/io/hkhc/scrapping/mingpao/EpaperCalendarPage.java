@@ -23,17 +23,18 @@ public class EpaperCalendarPage extends GenericPage {
 		pageUtils = new PageUtils(this);
 	}
 
-	public Map<String,HtmlAnchor> getAvailableDate() {
+	public Map<String,HtmlAnchor> loadAvailableDatesOfCurrentYear() {
 		
 		System.out.println("getAvailableDate");
 		
-		List<? extends HtmlElement> monthBlocks = getHtmlUnitHelper().getNodes("//table[@width='125']", getPage());
+		List<? extends HtmlElement> monthBlocks = getHtmlUnitHelper().getNodes("//div[@class='cal_main']/div[@class='cal']", getPage());
 		
 		int year = 0;
 		int month = 0;
 		int day = 0;
 		
 		for(HtmlElement monthBlock : monthBlocks) {
+			System.out.println("month block");
 			HtmlElement date = (HtmlElement)getHtmlUnitHelper().getSingleNode(".//tr[1]", monthBlock);
 			String dateStr = date.asText();
 			year = Integer.parseInt(dateStr.substring(0,4));
@@ -58,7 +59,7 @@ public class EpaperCalendarPage extends GenericPage {
 	}
 	
 	public int getYear() {
-		HtmlElement year = (HtmlElement)getHtmlUnitHelper().getSingleNode(".//tr[@align='center']/td[2]", getPage());
+		HtmlElement year = (HtmlElement)getHtmlUnitHelper().getSingleNode(".//div[@class='cal_top']/cfoutput[2]", getPage());
 		return Integer.parseInt(year.asText());
 	}
 
